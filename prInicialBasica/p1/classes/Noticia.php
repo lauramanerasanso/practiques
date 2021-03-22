@@ -4,6 +4,7 @@ class Noticia{
 
     protected $conn;
 
+    private $id;
     private $titol;
     private $descripcio;
     private $data_alta;
@@ -11,6 +12,14 @@ class Noticia{
 
     public function __construct($database){
         $this->conn = $database;
+    }
+
+    public function getId(){
+        return $this->id;
+    }
+
+    public function setId($id){
+        $this->id = $id;
     }
 
     public function getTitol(){
@@ -66,24 +75,36 @@ class Noticia{
 
     }
 
-    public function create($titol, $descripcio, $data_alta, $publicat){
+    public function create(){
         
         $query = "INSERT INTO noticia VALUES (?,?,?,?)";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssss", $titol, $descripcio, $data_alta, $publicat);
+        $stmt->bind_param("ssss", $this->titol, $this->descripcio, $this->data_alta, $this->publicat);
         $stmt->execute();
 
         return $stmt;
 
     }
 
-    public function update($titol, $descripcio, $data_alta, $publicat){
+    public function update(){
         
-        $query = "UPDATE noticia SET titol = ?, descripcio = ?, data_alta = ?, publicat = ?";
+        $query = "UPDATE noticia SET titol = ?, descripcio = ?, data_alta = ?, publicat = ? WHERE id = ?";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssss", $titol, $descripcio, $data_alta, $publicat);
+        $stmt->bind_param("ssssi", $this->titol, $this->descripcio, $this->data_alta, $this->publicat, $this->id);
+        $stmt->execute();
+
+        return $stmt;
+
+    }
+
+    public function delete(){
+        
+        $query = "DELETE FROM noticia WHERE id = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $this->id);
         $stmt->execute();
 
         return $stmt;
