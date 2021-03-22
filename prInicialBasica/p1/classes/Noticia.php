@@ -77,4 +77,16 @@ class Noticia{
         return $stmt;
 
     }
+
+    public function update($titol, $descripcio, $data_alta, $publicat){
+        
+        $query = "UPDATE noticia SET titol = ?, descripcio = ?, data_alta = ?, publicat = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ssss", $titol, $descripcio, $data_alta, $publicat);
+        $stmt->execute();
+
+        return $stmt;
+
+    }
 }
