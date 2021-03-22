@@ -65,4 +65,16 @@ class Noticia{
         return $result;
 
     }
+
+    public function create($titol, $descripcio, $data_alta, $publicat){
+        
+        $query = "INSERT INTO noticia VALUES (?,?,?,?)";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ssss", $titol, $descripcio, $data_alta, $publicat);
+        $stmt->execute();
+
+        return $stmt;
+
+    }
 }
